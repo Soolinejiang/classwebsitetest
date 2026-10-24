@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七八班学生文章展览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #f7f9fc;
+            color: #333;
+            line-height: 1.7;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        header h1 {
+            color: #2c3e50;
+            margin-bottom:12px;
+            font-size:28px;
+        }
+        header p {
+            color:#64748b;
+        }
+        .search-bar {
+            display: flex;
+            gap:12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-bottom:28px;
+        }
+        #searchInput {
+            width: 60%;
+            min-width:260px;
+            padding:10px 16px;
+            border:1px solid #cbd5e1;
+            border-radius:8px;
+            font-size:16px;
+            transition: border 0.2s;
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color:#60a5fa;
+        }
+        #sortBtn {
+            padding:10px 18px;
+            background:#34495e;
+            color:#fff;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:15px;
+            transition: background 0.2s;
+        }
+        #sortBtn:hover {
+            background:#2c3e50;
+        }
+        .article-list {
+            display: grid;
+            gap:16px;
+        }
+        .article-card {
+            background:#fff;
+            padding:20px;
+            border-radius:10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor:pointer;
+            transition: all 0.25s ease;
+        }
+        .article-card:hover {
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        }
+        .article-title {
+            font-size:19px;
+            font-weight:bold;
+            color:#2c3e50;
+            margin-bottom:4px;
+        }
+        .article-author {
+            font-size:14px;
+            color:#94a3b8;
+            margin-bottom:8px;
+        }
+        .article-preview {
+            color:#64748b;
+            font-size:14px;
+        }
+        .article-content {
+            margin-top:16px;
+            padding-top:16px;
+            border-top:1px solid #eee;
+            display:none;
+            white-space: pre-line;
+            color:#333;
+            line-height:1.8;
+            animation: fadeIn 0.3s ease;
+        }
+        .article-content.open {
+            display:block;
+        }
+        @keyframes fadeIn {
+            from {opacity:0;transform: translateY(6px);}
+            to {opacity:1;transform: translateY(0);}
+        }
+        .empty-tip {
+            text-align:center;
+            color:#888;
+            padding:40px;
+            font-size:16px;
+        }
+        #backTop {
+            position: fixed;
+            bottom:24px;
+            right:24px;
+            width:42px;
+            height:42px;
+            border-radius:50%;
+            border:none;
+            background:#34495e;
+            color:white;
+            cursor:pointer;
+            display:none;
+        }
+        footer {
+            text-align:center;
+            margin-top:40px;
+            color:#94a3b8;
+            font-size:14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>七八班学生文章展览</h1>
+            <p>以笔为舟，奔赴属于我们的青春</p>
+        </header>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="输入文章标题搜索...">
+            <button id="sortBtn">按标题 A→Z 排序</button>
+        </div>
+        <div class="article-list" id="articleList"></div>
+        <footer>
+            七八班 · 班级文集
+        </footer>
+    </div>
+    <button id="backTop">↑</button>
+
+    <script>
+        // ========== 文章数据（增加author作者字段） ==========
+        const articles = [
+            {
+                title: "文章一标题",
+                author: "学生A",
+                content: "在这里粘贴文章正文"
+            },
+            {
+                title: "文章二标题",
+                author: "学生B",
+                content: "在这里粘贴文章正文"
+            },
+            {
+                title: "文章三标题",
+                author: "学生C",
+                content: "在这里粘贴文章正文"
+            },
+            {
+                title: "文章四标题",
+                author: "学生D",
+                content: "在这里粘贴文章正文"
+            },
+            {
+                title: "文章五标题",
+                author: "学生E",
+                content: "在这里粘贴文章正文"
+            },
+            {
+                title: "文章六标题",
+                author: "学生F",
+                content: "在这里粘贴文章正文"
+           
